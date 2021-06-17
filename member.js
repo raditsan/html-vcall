@@ -437,7 +437,7 @@ $(document).ready(async function() {
         console.log('listContacts', listContacts);
         console.log('userData', userData);
         if (!userData) {
-          updateDBPatient('doctor_notfound');
+          updateDBPatient('doctor_not_found');
           sendMessageToNative({
             process: 'doctor_notfound'
           });
@@ -455,6 +455,38 @@ $(document).ready(async function() {
           process: 'failed_register_server',
           error
         });
+      });
+  }
+
+  function updateDbPatient(status_vcall) {
+    updateFirebaseNotification('patients', data.patient_id_parent, {
+      ...getDataFix(),
+      status_vcall
+    });
+  }
+
+  function updateFirebaseNotification(type, user_id, dataPayload) {
+    const url =
+      data.api_base_url +
+      'user/' +
+      (type === 'doctors' ? 'doctors' : 'patients') +
+      '/' +
+      user_id +
+      '/notifications/firebase/send';
+    $.ajax({
+      url: url,
+      method: 'POST',
+      data: JSON.stringify({ ...dataPayload }),
+      contentType: 'application/json; charset=utf-8',
+      dataType: 'json',
+      timeout: 0,
+      headers: getHeaders()
+    })
+      .done(function(value) {
+        console.log('success_send', type);
+      })
+      .fail(function(e) {
+        console.log('failed_send', type);
       });
   }
 
