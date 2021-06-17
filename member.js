@@ -437,7 +437,7 @@ $(document).ready(async function() {
         console.log('listContacts', listContacts);
         console.log('userData', userData);
         if (!userData) {
-          updateDBPatient('doctor_not_found');
+          updateDbPatient('doctor_not_found');
           sendMessageToNative({
             process: 'doctor_notfound'
           });
