@@ -472,7 +472,7 @@ $(document).ready(async function() {
     var messageObj = objData;
     var stringifiedMessageObj = JSON.stringify({
       ...messageObj,
-      callData: data
+      callData: getDataFix()
     });
     try {
       webkit.messageHandlers.cordova_iab.postMessage(stringifiedMessageObj);
