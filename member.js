@@ -439,7 +439,7 @@ $(document).ready(async function() {
         if (!userData) {
           updateDbPatient('doctor_not_found');
           sendMessageToNative({
-            process: 'doctor_notfound'
+            process: 'doctor_not_found'
           });
         } else {
           connectedSession = session;
