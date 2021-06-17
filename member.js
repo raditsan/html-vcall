@@ -448,12 +448,13 @@ $(document).ready(async function() {
         }
       })
       .catch(function(error) {
+        alert('failed_register_server');
+        console.error('User agent registration failed', error);
+        return;
         sendMessageToNative({
           process: 'failed_register_server',
           error
         });
-        alert('failed_register_server');
-        console.error('User agent registration failed', error);
       });
   }
 
