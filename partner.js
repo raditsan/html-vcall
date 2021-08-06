@@ -373,13 +373,14 @@ $(document).ready(async function() {
       method: 'GET',
       timeout: 0,
       headers: getHeaders()
-    }).done(function(response) {
-      const { data: results } = response || {};
-      if (results) {
-        listRekamMedis = results || [];
-        $('#medical-record-list').html('');
-        listRekamMedis.forEach(item => {
-          const p = `
+    })
+      .done(function(response) {
+        const { data: results } = response || {};
+        if (results) {
+          listRekamMedis = results || [];
+          $('#medical-record-list').html('');
+          listRekamMedis.forEach(item => {
+            const p = `
          ${item.follow_up ? '- ' + item.follow_up + '<br>' : ''}
          ${item.lab_item_name ? '- [LAB]' + item.lab_item_name + '<br>' : ''}
          ${
@@ -388,8 +389,8 @@ $(document).ready(async function() {
              : ''
          }
         `;
-          const penunjang = p.trim() === '' ? '-' : p;
-          $('#medical-record-list').append(`
+            const penunjang = p.trim() === '' ? '-' : p;
+            $('#medical-record-list').append(`
               <div class="medical-card">
               <div class="medical-header">
             
@@ -401,6 +402,7 @@ $(document).ready(async function() {
                   <small>Order ID : ${item.order_code}</small>
                 </label>
               </div>
+            
               <div class="row no-gutters medical-profile">
                 <div class="col-2">
                   <div class="medical-avatar align-center">
@@ -417,12 +419,37 @@ $(document).ready(async function() {
                       <div class="align-center" style="color: #000;">
                         <b>${item.doctor_name || item.partner_name}</b>
                       </div>
+                      <div class="align-center text-capitalize" style="color: #000;">
+                        ${item.doctor_type || item.partner_type || '-'}
+                      </div>
                     </div>
                     <div class="col text-right">
                       <p>${item.service_name || ''}</p>
                       <p><small>${moment(item.created_at).format(
                         'dddd, D MMM YYYY HH:mm'
                       )}</small></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row no-gutters medical-profile">
+                <div class="col-12">
+                <div class="label-gray">
+                  Pasien
+                </div>
+                </div>
+                <div class="col medical-profile-info label-gray">
+                  <div class="row no-gutters">
+                    <div class="col">
+                      <div class="align-center" style="color: #000;">
+                        <b>${item.patient_name}</b>
+                      </div>
+                      <div class="align-center text-capitalize" style="color: #000;">
+                        ${item.patient_gender}
+                      </div>
+                    </div>
+                    <div class="col text-right">
+                      <p>${item.patient_birth_date || ''}</p>
                     </div>
                   </div>
                 </div>
@@ -466,12 +493,16 @@ $(document).ready(async function() {
               </div>
             </div>
             `);
-        });
-        console.log('response', response);
-      } else {
-        alert('medical record  is null');
-      }
-    });
+          });
+          console.log('response', response);
+        } else {
+          alert('medical record  is null');
+        }
+      })
+      .fail(function(xhr, status, error) {
+        alert('cant get medical record');
+        console.log('error', error);
+      });
   }
 
   function showCountDownWaiting(state) {
